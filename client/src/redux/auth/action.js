@@ -56,7 +56,7 @@ export const activationByOTP =
       await axios
         .post("/api/v1/user/code-activation", { code: code , email: email})
         .then((res) => {
-          createToast("acount Activate", "success");
+          createToast("User account Activate", "success");
           cookie.remove("otp");
           navigate("/login");
         })

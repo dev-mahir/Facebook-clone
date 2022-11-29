@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate }  from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import closeBtn from '../../assets/icons/cross.png';
 import Tooltip from "../Tooltip/Tooltip";
 import { MdError } from 'react-icons/md';
@@ -128,7 +128,7 @@ const Register = ({ setRegister }) => {
                 , setInput,
                 e, setRegister, navigate
             ))
-            
+
         }
     }
 
@@ -151,8 +151,6 @@ const Register = ({ setRegister }) => {
                                     msg="What's your first name"
                                     right="207px"
                                 />}
-
-
                                 <input
                                     name="first_name"
                                     type="text"
@@ -169,7 +167,7 @@ const Register = ({ setRegister }) => {
                             <div className="input-box">
                                 {tooltip.sur_name && <Tooltip
                                     msg="What's your first name"
-                                    right="207px"
+                                    right="110px"
                                 />}
 
                                 <input
@@ -188,10 +186,10 @@ const Register = ({ setRegister }) => {
 
                         </div>
                         <div className="reg-form">
-                            <div className="input-box">
+                            <div className="input-box email">
                                 {tooltip.emailOrMobile && <Tooltip
                                     msg="You'll use this when you log in  and if you ever need to reset your password"
-                                    left="-385px"
+                                    left="-235px"
                                     width="370px"
                                 />}
                                 <input type="text"
@@ -208,11 +206,10 @@ const Register = ({ setRegister }) => {
                             </div>
                         </div>
                         <div className="reg-form">
-
                             <div className="input-box">
                                 {tooltip.password && <Tooltip
                                     msg="Enter a combination of at least six numbers, letters and punctuation marks (such as ! and &)"
-                                    left="-385px"
+                                    left="-405px"
                                     width="370px"
                                 />}
                                 <input type="text"

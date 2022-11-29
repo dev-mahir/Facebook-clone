@@ -257,23 +257,26 @@ export const activateAccountByCode = async (req, res, next) => {
   try {
     const { code, email } = req.body;
 
-    const user = await User.findOne().and([
-      { access_token: code },
-      { isActivate: false },
-      { email: email}
-    ]);
+    const user = await User.findOne({ email: email });
 
     if (!user) {
-      next(createError(400, "Invalid OTP code"));
-    }
-    if (user) {
-      await User.findByIdAndUpdate(user._id, {
-        isActivate: true,
-        access_token: "",
-      });
-      res.status(200).json({
-        message: "Account activate successfully",
-      });
+      next(createError(404, "Activation user not found"));
+    } else {
+      if (user.isActivate === true) {
+        next(createError(400, "User accounr already activate"));
+      } else {
+        if (user.access_token !== code) {
+          next(createError(400, " OTP code not match"));
+        } else {
+          await User.findByIdAndUpdate(user._id, {
+            isActivate: true,
+            access_token: "",
+          });
+          res.status(200).json({
+            message: "Account activate successfully",
+          });
+        }
+      }
     }
   } catch (error) {
     next(error);

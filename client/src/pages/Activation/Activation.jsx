@@ -1,13 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import fbLogo from '../../assets/icons/facebook.svg'
 import Footer from '../../components/Footer/Footer';
 import cookie from 'js-cookie'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { activationByOTP, resendLink } from '../../redux/auth/action';
 import { createToast } from '../../utility/toast';
+import ResetHeader from '../../components/ResetHeader/ResetHeader';
 
 const Activation = () => {
 
@@ -28,7 +28,7 @@ const Activation = () => {
     const handleCodeContinue = (e) => {
         e.preventDefault();
         if (!code) {
-            createToast("Set a OTP code first", 'warn');
+            createToast("OTP code is required", 'warn');
         }
         else {
             dispatch(activationByOTP({
@@ -60,21 +60,8 @@ const Activation = () => {
 
 
     return (
-        <>
-            {/* Facebook Auth Area */}
-            <div className="reset-header">
-                <div className="reset-header-wraper">
-                    <div className="reset-logo">
-                        <img src={fbLogo} alt="" />
-                    </div>
-                    <div className="login-part">
-                        <input type="text" placeholder="Email or mobile number" />
-                        <input type="text" placeholder="Password" />
-                        <button>Log In</button>
-                        <a href="#">Forgotten account?</a>
-                    </div>
-                </div>
-            </div>
+        <>  
+            <ResetHeader/>
             {/* reset Box  */}
             <div className="reset-area">
                 <div className="reset-wraper">
