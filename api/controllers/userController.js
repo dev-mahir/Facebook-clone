@@ -6,8 +6,9 @@ import {
   sendActivationLink,
   sendPasswordForgotLink,
 } from "../utility/sendMail.js";
+import { sendOTP } from "../utility/sendSMS.js";
 import { createToken, tokenVerify } from "../utility/token.js";
-import { isEmail } from "../utility/validate.js";
+import { isEmail, isPhone } from "../utility/validate.js";
 
 /**
  * @access public
@@ -17,52 +18,91 @@ import { isEmail } from "../utility/validate.js";
 export const register = async (req, res, next) => {
   try {
     // get form data
-    const { first_name, sur_name, email, password, gender } = req.body;
+    const { first_name, sur_name, auth, password, gender } = req.body;
 
     // validation
-    if (!first_name || !sur_name || !email || !password || !gender) {
+    if (!first_name || !sur_name || !auth || !password || !gender) {
       next(createError(400, "All fields are required"));
     }
-    if (!isEmail(email)) {
-      next(createError(400, "Invalid Email Address"));
-    }
-    // email check
-    const emailUser = await User.findOne({ email });
-    if (emailUser) {
-      next(createError(400, "Email already exists"));
+
+    // initial auth value
+    let mobileData = null;
+    let emailData = null;
+
+    if (isEmail(auth)) {
+      emailData = auth;
+      // email check
+      const emailCheck = await User.findOne({ email: auth });
+      if (emailCheck) {
+        next(createError(400, "Email already exists"));
+        return;
+      }
+    } else if (isPhone(auth)) {
+      mobileData = auth;
+      // email check
+      const mobileCheck = await User.findOne({ mobile: auth });
+      if (mobileCheck) {
+        next(createError(400, "Mobile already exists"));
+        return;
+      }
+    } else {
+      next(createError(400, "Invalid phone or email"));
+      return;
     }
 
+    // create access token
     const activation_code = getRandom();
 
     // create user
     const user = await User.create({
       ...req.body,
       password: hash(password),
+      mobile: mobileData,
+      email: emailData,
       access_token: activation_code,
     });
 
     if (user) {
-      // create activation token
-      const activationToken = createToken({ id: user._id }, "30d");
+      if (emailData) {
+        // create activation token
+        const activationToken = createToken({ id: user._id }, "30d");
 
-      // send activation link
-      sendActivationLink(user.email, {
-        name: user.first_name + " " + user.sur_name,
-        link: `${
-          process.env.APP_URL + ":" + process.env.PORT
-        }/api/v1/user/activate/${activationToken}`,
-        code: activation_code,
-      });
-
-      res
-        .status(200)
-        .cookie("otp", user.email, {
-          expires: new Date(Date.now() + 1000 * 60 * 15),
-        })
-        .json({
-          message: "User created successfull",
-          user,
+        // send activation link
+        sendActivationLink(user.email, {
+          name: user.first_name + " " + user.sur_name,
+          link: `${
+            process.env.APP_URL + ":" + process.env.PORT
+          }/api/v1/user/activate/${activationToken}`,
+          code: activation_code,
         });
+        res
+          .status(200)
+          .cookie("otp", user.email, {
+            expires: new Date(Date.now() + 1000 * 60 * 15),
+          })
+          .json({
+            message: "User created successfull",
+            user,
+          });
+      }
+
+      if (mobileData) {
+        // send activation otp
+        sendOTP(
+          user.mobile,
+          `Hi ${user.first_name} ${user.sur_name}, Your account activation code is ${activation_code} `
+        );
+
+        res
+          .status(200)
+          .cookie("otp", user.mobile, {
+            expires: new Date(Date.now() + 1000 * 60 * 15),
+          })
+          .json({
+            message: "User created successfull",
+            user,
+          });
+      }
     }
   } catch (error) {
     next(error);
@@ -70,36 +110,94 @@ export const register = async (req, res, next) => {
 };
 
 /**
+ * Resend account activation code
  * @access public
- * @route /api/user/resend-activation
+ * @route /api/user/resend-activate
  * @method POST
  */
 
 export const resendActivation = async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { auth } = req.body;
 
-    const emailUser = await User.findOne({ email: email });
-    if (!emailUser) {
-      next(createError(400, "Invalid link request !"));
+    // initial auth value
+    let mobileData = null;
+    let emailData = null;
+    let emailCheck;
+    let mobileCheck;
+
+    if (isEmail(auth)) {
+      emailData = auth;
+      // email check
+       emailCheck = await User.findOne({ email: auth });
+
+      if (!emailCheck) {
+        next(createError(404, "Email User Account not found"));
+        return;
+      }
+      if (emailCheck.isActivate) {
+        next(createError(400, "Email user already activate"));
+      }
+    } else if (isPhone(auth)) {
+      mobileData = auth;
+      // mobile check
+       mobileCheck = await User.findOne({ mobile: auth });
+      if (!mobileCheck) {
+        next(createError(404, "Mobile User Account not found"));
+        return;
+      }
+      if (mobileCheck.isActivate) {
+        next(createError(400, "Mobile user already activate"));
+      }
+    } else {
+      next(createError(400, "Invalid phone or email"));
+      return;
     }
-    if (emailUser) {
-      // create activation token
-      const activationToken = createToken({ id: emailUser._id }, "30d");
-      // code generate
-      const activation_code = getRandom();
+
+  
+
+    // code generate
+    const activation_code = getRandom();
+
+    if (mobileData) {
+      // send activation otp
+      sendOTP(
+        mobileCheck.mobile,
+        `Hi ${mobileCheck.first_name} ${mobileCheck.sur_name}, Your account activation code is ${activation_code} `
+      );
 
       // upadate code
       await User.findByIdAndUpdate(
-        { _id: emailUser._id },
+        { _id: mobileCheck._id },
+        {
+          access_token: activation_code,
+        }
+      );
+      res
+        .status(200)
+        .cookie("otp", mobileCheck.mobile, {
+          expires: new Date(Date.now() + 1000 * 60 * 15),
+        })
+        .json({
+          message: "New OTP code send successfull",
+        });
+    }
+
+    if (emailData) {
+      // create activation token
+      const activationToken = createToken({ id: emailCheck._id }, "30d");
+      
+      // upadate code
+      await User.findByIdAndUpdate(
+        { _id: emailCheck._id },
         {
           access_token: activation_code,
         }
       );
 
       // send activation link
-      sendActivationLink(emailUser.email, {
-        name: emailUser.first_name + " " + emailUser.sur_name,
+      sendActivationLink(emailCheck.email, {
+        name: emailCheck.first_name + " " + emailCheck.sur_name,
         link: `${
           process.env.APP_URL + ":" + process.env.PORT
         }/api/v1/user/activate/${activationToken}`,
@@ -108,11 +206,11 @@ export const resendActivation = async (req, res, next) => {
 
       res
         .status(200)
-        .cookie("otp", emailUser.email, {
+        .cookie("otp", emailCheck.email, {
           expires: new Date(Date.now() + 1000 * 60 * 15),
         })
         .json({
-          message: "Activation link send",
+          message: "New opt code send ",
         });
     }
   } catch (error) {
@@ -257,7 +355,7 @@ export const activateAccountByCode = async (req, res, next) => {
   try {
     const { code, email } = req.body;
 
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne().or([{ email: email }, { mobile: email }]); // match  phone or email
 
     if (!user) {
       next(createError(404, "Activation user not found"));

@@ -66,7 +66,7 @@ const Register = ({ setRegister }) => {
     const [input, setInput] = useState({
         first_name: '',
         sur_name: '',
-        emailOrMobile: '',
+        auth: '',
         password: '',
         birth_date: '',
         birth_month: '',
@@ -74,13 +74,13 @@ const Register = ({ setRegister }) => {
         gender: ''
     })
 
-    const { first_name, sur_name, emailOrMobile, password, birth_date, birth_month, birth_year, gender } = input;
+    const { first_name, sur_name, auth, password, birth_date, birth_month, birth_year, gender } = input;
 
     // form validate state 
     const [validate, setValidate] = useState({
         first_name: false,
         sur_name: false,
-        emailOrMobile: false,
+        auth: false,
         password: false,
         birth_date: false,
         birth_month: false,
@@ -92,7 +92,7 @@ const Register = ({ setRegister }) => {
     const [tooltip, setTooltip] = useState({
         first_name: false,
         sur_name: false,
-        emailOrMobile: false,
+        auth: false,
         password: false,
         day: false,
         month: false,
@@ -151,14 +151,14 @@ const Register = ({ setRegister }) => {
     // handle register 
     const handleRegister = (e) => {
         e.preventDefault();
-        if (!input.first_name || !input.sur_name || !input.emailOrMobile || !input.password || !input.gender) {
+        if (!input.first_name || !input.sur_name || !input.auth || !input.password || !input.gender) {
             createToast("All fields are required");
         } else {
             dispatch(userRegister(
                 {
                     first_name,
                     sur_name,
-                    email: emailOrMobile,
+                    auth,
                     password,
                     birth_date,
                     birth_month,
@@ -227,20 +227,20 @@ const Register = ({ setRegister }) => {
                         </div>
                         <div className="reg-form">
                             <div className="input-box email">
-                                {tooltip.emailOrMobile && <Tooltip
+                                {tooltip.auth && <Tooltip
                                     msg="You'll use this when you log in  and if you ever need to reset your password"
                                     left="-235px"
                                     width="370px"
                                 />}
                                 <input type="text"
-                                    name="emailOrMobile"
-                                    className={validate.emailOrMobile && "error-border"}
+                                    name="auth"
+                                    className={validate.auth && "error-border"}
                                     onChange={handleInputChange}
-                                    value={input.emailOrMobile}
+                                    value={input.auth}
                                     onBlur={handleInputValidate}
                                     onFocus={handleInputValidateFocus}
                                     placeholder="Mobile number or email address" />
-                                {validate.emailOrMobile && <span className="error-icon"><MdError /> </span>}
+                                {validate.auth && <span className="error-icon"><MdError /> </span>}
 
 
                             </div>
