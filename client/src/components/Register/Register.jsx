@@ -8,14 +8,54 @@ import { createToast } from '../../utility/toast'
 import { userRegister } from "../../redux/auth/action";
 import { useDispatch } from 'react-redux'
 
-// date
 
+
+// date
 const day = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
 const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 const years = Array.from({ length: 118 }, (_, i) => new Date().getFullYear() - i);
 
 
+
 const Register = ({ setRegister }) => {
+
+    // current date 
+    const date = new Date();
+
+    // Find current Month  
+    const isMonth = (month) => {
+        switch (month) {
+            case "Jan":
+                return 'Jan'
+            case "Feb":
+                return 'Feb'
+            case "Mar":
+                return 'Mar'
+            case "Apr":
+                return 'Apr'
+            case "May":
+                return 'May'
+            case "Jun":
+                return 'Jun'
+            case "Jul":
+                return 'Jul'
+            case "Aug":
+                return 'Aug'
+            case "Sept":
+                return 'Sept'
+            case "Oct":
+                return 'Oct'
+            case "Nov":
+                return 'Nov'
+            case "Dec":
+                return 'Dec'
+            default:
+                return false
+        }
+    }
+
+
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -222,8 +262,6 @@ const Register = ({ setRegister }) => {
                                     placeholder="New password" />
 
                                 {validate.password && <span className="error-icon"><MdError /> </span>}
-
-
                             </div>
                         </div>
                         <div className="reg-form">
@@ -232,17 +270,18 @@ const Register = ({ setRegister }) => {
 
                                 <select name="birth_date" className={validate.day && "error-border"} onChange={handleInputChange} >
                                     {day.map((item, index) =>
-                                        <option value={item} key={index}> {item}</option>
+                                        <option value={item} key={index} selected={date.getDate() === item ? true : false}> {item}</option>
                                     )}
+
                                 </select>
                                 <select name="birth_month" onChange={handleInputChange} >
                                     {month.map((item, index) =>
-                                        <option value={item} key={index}>{item}</option>
+                                        <option value={item} key={index} selected={isMonth(item) === item ? true : false} >{item}</option>
                                     )}
                                 </select>
                                 <select name="birth_year" onChange={handleInputChange} >
                                     {years.map((item, index) =>
-                                        <option value={item} key={index}>{item}</option>
+                                        <option value={item} key={index} selected={date.getFullYear() === item ? true : false}>{item}  </option>
                                     )}
                                 </select>
                             </div>
