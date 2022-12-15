@@ -7,6 +7,7 @@
 
 .tooltip-box {
   position: absolute;
+  z-index: 9999;
 }
 .tooltip-box .tooltip {
   background: #be4b49;
@@ -25,6 +26,17 @@
   border-width: 5px 0 5px 8px;
   border-color: transparent transparent transparent #be4b49;
 }
+.tooltip-box .tooltip.top::after {
+    position: absolute;
+    content: "";
+    top: -6px;
+    right: 102px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 6px 8px 6px;
+    border-color: transparent transparent #be4b49 transparent;
+}
 .tooltip-box .tooltip p {
   color: #fff;
   font-weight: 500;
@@ -40,6 +52,33 @@
   top: 10px;
   right: 10px;
 }
-.error-border{
-border: 1px solid #be4b49 !important;
+.error-border {
+  border: 1px solid #be4b49 !important;
+}
+
+.custom-gender {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin-top: 15px;
+}
+.custom-gender select {
+  width: 100%;
+}
+.custom-gender span {
+  font-size: 14px;
+  color: #606770;
+}
+
+.reg-form-select div label {
+  width: 100% !important;
+}
+.reg-form-select div input {
+  margin-left: 20px !important;
+  cursor: pointer;
+}
+
+.reg-form-select .custom_gender {
+  margin: 0 !important;
+  cursor: auto;
 }

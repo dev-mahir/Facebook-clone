@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../../components/Footer/Footer'
 import ResetHeader from '../../components/ResetHeader/ResetHeader'
 
 const Password = () => {
+    const [password, setPassword] = useState("");
+
+
+
     return (
         <>
             <ResetHeader />
@@ -20,14 +24,18 @@ const Password = () => {
                                 marks.
                             </p>
                             <div className="code-box">
-                                <input className="w-100" type="text" placeholder="New password" />
+                                <input
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    value={password}
+                                    className="w-100" type="text" placeholder="New password"
+                                />
                             </div>
                         </div>
                         <div className="reset-footer">
                             <a href="#" />
                             <div className="reset-btns">
                                 <Link className="cancel" to="/login">Skip</Link>
-                                <a className="continue" href="#">Continue</a>
+                                <a className="continue" href="#" >Continue</a>
                             </div>
                         </div>
                     </div>

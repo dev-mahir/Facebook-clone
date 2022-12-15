@@ -34,7 +34,7 @@ export const userRegister =
           e.target.reset();
           setRegister(false);
 
-          navigate("/activation");
+          navigate("/activation/account");
         })
         .catch((error) => {
           createToast(error.response.data.message, "warn");
@@ -47,6 +47,7 @@ export const userRegister =
       console.log(error);
     }
   };
+
 
 // user account activation by otp
 export const activationByOTP =
@@ -68,16 +69,41 @@ export const activationByOTP =
     }
   };
 
+
 // resend link
 export const resendLink =
-  (email) =>
+  (email, navigate) =>
   async (dispatch) => {
     try {
       await axios
         .post("/api/v1/user/resend-activate", { auth: email })
         .then((res) => {
           createToast(res.data.message, "success");
+          navigate('/activation/account');
         })
+        .catch((error) => {
+          createToast(error.response.data.message);
+        });
+    } catch (error) {
+      createToast(error.response.data.message);
+    }
+  };
+
+
+    
+// check password reset otp code 
+export const checkPasswordResetCode =
+  (data, navigate, cookie) =>
+    async (dispatch) => {
+      console.log(data);
+    try {
+      await axios
+        .post("/api/v1/user/check-password-reset-otp", data)
+        .then((res) => {
+          createToast("You can change your password", "success");
+          cookie.remove('otp')
+          navigate("/change-password");
+        }) 
         .catch((error) => {
           createToast(error.response.data.message);
         });

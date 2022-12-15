@@ -92,7 +92,6 @@ export const register = async (req, res, next) => {
           user.mobile,
           `Hi ${user.first_name} ${user.sur_name}, Your account activation code is ${activation_code} `
         );
-
         res
           .status(200)
           .cookie("otp", user.mobile, {
@@ -129,7 +128,7 @@ export const resendActivation = async (req, res, next) => {
     if (isEmail(auth)) {
       emailData = auth;
       // email check
-       emailCheck = await User.findOne({ email: auth });
+      emailCheck = await User.findOne({ email: auth });
 
       if (!emailCheck) {
         next(createError(404, "Email User Account not found"));
@@ -141,7 +140,7 @@ export const resendActivation = async (req, res, next) => {
     } else if (isPhone(auth)) {
       mobileData = auth;
       // mobile check
-       mobileCheck = await User.findOne({ mobile: auth });
+      mobileCheck = await User.findOne({ mobile: auth });
       if (!mobileCheck) {
         next(createError(404, "Mobile User Account not found"));
         return;
@@ -153,8 +152,6 @@ export const resendActivation = async (req, res, next) => {
       next(createError(400, "Invalid phone or email"));
       return;
     }
-
-  
 
     // code generate
     const activation_code = getRandom();
@@ -186,7 +183,7 @@ export const resendActivation = async (req, res, next) => {
     if (emailData) {
       // create activation token
       const activationToken = createToken({ id: emailCheck._id }, "30d");
-      
+
       // upadate code
       await User.findByIdAndUpdate(
         { _id: emailCheck._id },
@@ -465,6 +462,273 @@ export const passwordResetAction = async (req, res, next) => {
           message: "Password reset successfull",
         });
       }
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ *find user account for password reset
+ * @access public
+ * @route /api/user/find-account
+ * @method POST
+ */
+
+export const findUserAccount = async (req, res, next) => {
+  try {
+    const { auth } = req.body;
+
+    // initial auth value
+    let mobileData = null;
+    let emailData = null;
+
+    if (isEmail(auth)) {
+      emailData = auth;
+      // email check
+      const emailCheck = await User.findOne({ email: auth });
+      if (!emailCheck) {
+        next(createError(400, "Email User doesn't exists"));
+        return;
+      } else {
+        res
+          .status(200)
+          .cookie(
+            "findUser",
+            JSON.stringify({
+              name: emailCheck.first_name + " " + emailCheck.sur_name,
+              photo: emailCheck.profile_photo,
+              email: emailCheck.email,
+            }),
+            {
+              expires: new Date(Date.now() + 1000 * 60 * 15),
+            }
+          )
+          .json({
+            user: emailCheck,
+          });
+      }
+    } else if (isPhone(auth)) {
+      mobileData = auth;
+      // email check
+      const mobileCheck = await User.findOne({ mobile: auth });
+      if (!mobileCheck) {
+        next(createError(400, "Mobile User doesn't exists"));
+        return;
+      } else {
+        res
+          .status(200)
+          .cookie(
+            "findUser",
+            JSON.stringify({
+              name: mobileCheck.first_name + " " + mobileCheck.sur_name,
+              photo: mobileCheck.profile_photo,
+              mobile: mobileCheck.mobile,
+            }),
+            {
+              expires: new Date(Date.now() + 1000 * 60 * 15),
+            }
+          )
+          .json({
+            user: mobileCheck,
+          });
+      }
+    } else {
+      next(createError(400, "Invalid phone or email"));
+      return;
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ *
+ * Send password reset otp
+ * @access public
+ * @route /api/user/send-password-reset-otp
+ * @method GET
+ */
+
+export const sendPasswordResetOTP = async (req, res, next) => {
+  try {
+    const { auth } = req.body;
+
+    // initial auth value
+    let mobileData = null;
+    let emailData = null;
+    let emailCheck;
+    let mobileCheck;
+
+    if (isEmail(auth)) {
+      emailData = auth;
+      // email check
+      emailCheck = await User.findOne({ email: auth });
+    } else if (isPhone(auth)) {
+      mobileData = auth;
+      mobileCheck = await User.findOne({ mobile: auth });
+    } else {
+      next(createError(400, "Invalid phone or email"));
+      return;
+    }
+
+    // code generate
+    const activation_code = getRandom();
+
+    if (mobileData) {
+      // send activation otp
+      sendOTP(
+        mobileCheck.mobile,
+        `Hi ${mobileCheck.first_name} ${mobileCheck.sur_name}, Your account activation code is ${activation_code} `
+      );
+
+      // upadate code
+      await User.findByIdAndUpdate(
+        { _id: mobileCheck._id },
+        {
+          access_token: activation_code,
+        }
+      );
+      res
+        .status(200)
+        .cookie("otp", mobileCheck.mobile, {
+          expires: new Date(Date.now() + 1000 * 60 * 15),
+        })
+        .json({
+          message: "New OTP code send successfull",
+        });
+    }
+
+    if (emailData) {
+      // create activation token
+      const activationToken = createToken({ id: emailCheck._id }, "30d");
+
+      // upadate code
+      await User.findByIdAndUpdate(
+        { _id: emailCheck._id },
+        {
+          access_token: activation_code,
+        }
+      );
+
+      // send activation link
+      sendActivationLink(emailCheck.email, {
+        name: emailCheck.first_name + " " + emailCheck.sur_name,
+        link: `${
+          process.env.APP_URL + ":" + process.env.PORT
+        }/api/v1/user/activate/${activationToken}`,
+        code: activation_code,
+      });
+
+      res
+        .status(200)
+        .cookie("otp", emailCheck.email, {
+          expires: new Date(Date.now() + 1000 * 60 * 15),
+        })
+        .json({
+          message: "New opt code send ",
+        });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ *
+ * check password reset otp
+ * @access public
+ * @route /api/user/check-password-reset-otp
+ * @method POST
+ */
+
+export const checkPasswordResetOtp = async (req, res, next) => {
+  try {
+    const { code, auth } = req.body;
+
+    if (isEmail(auth)) {
+      const userData = await User.findOne().where("email").equals(auth);
+      if (!userData) {
+        return next(createError(400, "Invalid user request"));
+      }
+      if (userData) {
+        if (userData.access_token != code) {
+          return next(createError(400, "Invalid OTP code"));
+        }
+        if (userData.access_token == code) {
+          return res
+            .status(200)
+            .cookie("cpId", userData._id, {
+              expires: new Date(Date.now() + 1000 * 60 * 15),
+            })
+            .cookie("code", code, {
+              expires: new Date(Date.now() + 1000 * 60 * 15),
+            })
+            .json({
+              message: "You can change your password",
+            });
+        }
+      }
+    } else if (isPhone(auth)) {
+      const userData = await User.findOne().where("mobile").equals(auth);
+      if (!userData) {
+        return next(createError(400, "Invalid user request"));
+      }
+      if (userData) {
+        if (userData.access_token != code) {
+          return next(createError(400, "Invalid OTP code"));
+        }
+        if (userData.access_token == code) {
+          return res
+            .status(200)
+            .cookie("cpId", userData._id, {
+              expires: new Date(Date.now() + 1000 * 60 * 15),
+            })
+            .cookie("code", code, {
+              expires: new Date(Date.now() + 1000 * 60 * 15),
+            })
+            .json({
+              message: "You can change your password",
+            });
+        }
+      }
+    } else {
+      next(createError(400, "Invalid phone or email"));
+      return;
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ *
+ * Password Reset
+ * @access public
+ * @route /api/user/password-reset
+ * @method POST
+ */
+
+export const passwordReset = async (req, res, next) => {
+  try {
+    const { password, id, code } = req.body;
+
+    const userData = await User.findOne().and([
+      { _id: id },
+      { access_token: code },
+    ]);
+    if (!userData) {
+      return next(createError(400, "Password change request failed"));
+    }
+    if (userData) {
+      await User.findByIdAndUpdate(id, {
+        password: hash(password),
+      });
+      return res
+        .clearCookie("code")
+        .clearCookie("cpId")
+        .status(200)
+        .json({ message: "User password change successfully" });
     }
   } catch (error) {
     next(error);

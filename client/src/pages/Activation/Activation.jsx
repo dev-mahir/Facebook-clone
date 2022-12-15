@@ -1,15 +1,17 @@
 import React from 'react';
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Footer from '../../components/Footer/Footer';
 import cookie from 'js-cookie'
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { activationByOTP, resendLink } from '../../redux/auth/action';
+import { activationByOTP, checkPasswordResetCode, resendLink } from '../../redux/auth/action';
 import { createToast } from '../../utility/toast';
 import ResetHeader from '../../components/ResetHeader/ResetHeader';
 
 const Activation = () => {
+
+    const { type } = useParams();
 
     // navigate 
     const navigate = useNavigate();
@@ -27,14 +29,14 @@ const Activation = () => {
 
     const handleCodeContinue = (e) => {
         e.preventDefault();
+
         if (!code) {
             createToast("OTP code is required", 'warn');
         }
         else {
-            dispatch(activationByOTP({
-                code: code,
-                email: activationEmail
-            }, navigate, cookie))
+            dispatch(activationByOTP(
+                { code: code, email: activationEmail },
+             navigate, cookie))
         }
     }
 
@@ -42,7 +44,6 @@ const Activation = () => {
         e.preventDefault();
         cookie.remove('otp');
         navigate('/login');
-
     }
 
     // handle resend link 
@@ -50,6 +51,27 @@ const Activation = () => {
         e.preventDefault();
         dispatch(resendLink(activationEmail))
     }
+
+
+
+    // handle password reset 
+    const handlePasswordReset = (e) => {
+        e.preventDefault();
+        console.log("okkkkkk");
+        if (!code) {
+            createToast("OTP code is required", 'warn');
+        }
+        else {
+            dispatch(checkPasswordResetCode({
+                code: code,
+                auth: activationEmail
+            }, navigate, cookie))
+        }
+    }
+
+
+
+
 
 
     useEffect(() => {
@@ -60,8 +82,8 @@ const Activation = () => {
 
 
     return (
-        <>  
-            <ResetHeader/>
+        <>
+            <ResetHeader />
             {/* reset Box  */}
             <div className="reset-area">
                 <div className="reset-wraper">
@@ -86,13 +108,13 @@ const Activation = () => {
                             <a href="#" onClick={handleResendLink}>Didn't get a code?</a>
                             <div className="reset-btns">
                                 <a onClick={handleActivationCancel} className="cancel" href='#'>Cancel</a>
-                                <a className="continue" href="#" onClick={handleCodeContinue}>Continue</a>
+                                <a className="continue" href="#" onClick={type === 'account' ? handleCodeContinue : handlePasswordReset}>Continue</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* FB FOOTER AREA  */}
+
             <Footer />
         </>
 

@@ -10,7 +10,6 @@ const Tooltip = ({ msg, right, left, bottom, top, angle, width }) => {
         tooltipBox.current.parentElement.style.position = "relative"
     })
 
-
     return (
         <div style={{ top: top, left: left, right: right, bottom: bottom }} className="tooltip-box" ref={tooltipBox} >
 

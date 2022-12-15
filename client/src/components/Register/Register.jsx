@@ -18,6 +18,7 @@ const years = Array.from({ length: 118 }, (_, i) => new Date().getFullYear() - i
 
 
 const Register = ({ setRegister }) => {
+    const [custom_gender, setCustom_gender] = useState(false)
 
     // current date 
     const date = new Date();
@@ -190,6 +191,7 @@ const Register = ({ setRegister }) => {
                                 {tooltip.first_name && <Tooltip
                                     msg="What's your first name"
                                     right="207px"
+                                    top="2px"
                                 />}
                                 <input
                                     name="first_name"
@@ -207,7 +209,9 @@ const Register = ({ setRegister }) => {
                             <div className="input-box">
                                 {tooltip.sur_name && <Tooltip
                                     msg="What's your first name"
-                                    right="110px"
+                                    right="60px"
+                                    top="50px"
+                                    angle = "top"
                                 />}
 
                                 <input
@@ -220,8 +224,6 @@ const Register = ({ setRegister }) => {
                                     placeholder="Surname" value={input.sur_name} />
 
                                 {validate.sur_name && <span className="error-icon"><MdError /> </span>}
-
-
                             </div>
 
                         </div>
@@ -242,15 +244,14 @@ const Register = ({ setRegister }) => {
                                     placeholder="Mobile number or email address" />
                                 {validate.auth && <span className="error-icon"><MdError /> </span>}
 
-
                             </div>
                         </div>
                         <div className="reg-form">
                             <div className="input-box">
                                 {tooltip.password && <Tooltip
                                     msg="Enter a combination of at least six numbers, letters and punctuation marks (such as ! and &)"
-                                    left="-405px"
-                                    width="370px"
+                                    left="-275px"
+                                    width="240px"
                                 />}
                                 <input type="text"
                                     name="password"
@@ -298,11 +299,26 @@ const Register = ({ setRegister }) => {
                                     Male
                                     <input type="radio" name="gender" value="Female" onChange={handleInputChange} />
                                 </label>
-                                <label>
+                                <div >
+                                    <label htmlFor="custom_gender" onClick={() => setCustom_gender(!custom_gender)}  >
                                     Custom
-                                    <input type="radio" name="gender" onChange={handleInputChange} />
+                                        <input id="custom_gender"  type="radio"  name="gender" onChange={handleInputChange} />
                                 </label>
+                             </div>
                             </div>
+                            {custom_gender && <div className="reg-form-select custom-gender">
+                                <select name="" id="">
+                                    <option disabled selected>Choose your pronoun (the gender you'll be called). </option>
+                                    <option value="1">He/She: "Wish him a happy birthday!"</option>
+                                    <option value="1">They/Them: "Wish him a happy birthday!"</option>
+                                </select>
+                                <span>Everyone will see your pronouns.</span>
+                                <div className="reg-form">
+                                    <input name="custom_gender" className="custom_gender" type="text" placeholder="Gender (Optional)" />
+                                </div>
+
+                            </div>
+                            }
                         </div>
 
                         <div className="reg-form">

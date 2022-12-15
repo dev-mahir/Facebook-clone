@@ -1,9 +1,33 @@
+import axios from 'axios'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer/Footer'
 import ResetHeader from '../../components/ResetHeader/ResetHeader'
+import { createToast } from '../../utility/toast'
 
 const Forgot = () => {
+    const [auth, setAuth] = useState("");
+
+    const navigate = useNavigate();
+
+
+    const handleFindUser = (e) => {
+        e.preventDefault();
+        if (!auth) {
+            createToast("Input field is required");
+        } else {
+            axios.post("/api/v1/user/find-account", {auth})
+                .then(res => {
+                    navigate('/find-account');
+                })
+                .catch(error => {
+                    createToast(error.response.data.message);
+                });
+        }
+    }
+
+
     return (
         <>
             <ResetHeader />
@@ -20,14 +44,14 @@ const Forgot = () => {
                                 your account.
                             </p>
                             <div className="code-box">
-                                <input className="w-100" type="text" placeholder="Email address or mobile number" />
+                                <input name='auth' value={auth} onChange={(e) => setAuth(e.target.value)} className="w-100" type="text" placeholder="Email address or mobile number" />
                             </div>
                         </div>
                         <div className="reset-footer">
                             <a href="#" />
                             <div className="reset-btns">
                                 <Link to="/login" className="cancel">Cancel</Link>
-                                <a className="continue" href="#">Search</a>
+                                <a href="#" onClick={handleFindUser} className="continue">Search</a>
                             </div>
                         </div>
                     </div>

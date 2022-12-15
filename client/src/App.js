@@ -18,7 +18,7 @@ function App() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/login" element={<Auth />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
-        <Route path="/activation" element={<Activation />}></Route>
+        <Route path="/activation/:type" element={<Activation />}></Route>
         <Route path="/forgot-password" element={<Forgot />}></Route>
         <Route path="/find-account" element={<FindAccount />}></Route>
         <Route path="/change-password" element={<Password />}></Route>
