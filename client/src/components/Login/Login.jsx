@@ -1,9 +1,36 @@
 import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import fbLogo from '../../assets/icons/facebook.svg';
+import { createToast } from "../../utility/toast";
 
 
 const Login = ({ setRegister }) => {
+    const [input, setInput] = useState({
+        auth: "",
+        password: ""
+    })
+
+    const handleInputChange = (e) => {
+        setInput((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const handleUserSubmit = (e) => {
+        e.preventDefault();
+        if (!input.auth || !input.password) {
+            createToast("All fields are required");
+        } else {
+
+        }
+
+    }
+
+
+
+
     return <>
         <div className="fb-auth">
             <div className="auth-wraper">
@@ -15,15 +42,21 @@ const Login = ({ setRegister }) => {
                 </div>
                 <div className="auth-right">
                     <div className="auth-box">
-                        <form action="">
+                        <form onSubmit={handleUserSubmit}>
                             <div className="auth-form">
                                 <input
                                     type="text"
+                                    name="auth"
+                                    onChange={handleInputChange}
+                                    value={input.auth}
                                     placeholder="Email address or phone number"
                                 />
                             </div>
                             <div className="auth-form">
-                                <input type="password" placeholder="Password" />
+                                <input type="password"
+                                    name="password"
+                                    onChange={handleInputChange}
+                                    value={input.password} placeholder="Password" />
                             </div>
                             <div className="auth-form">
                                 <button type="submit">Log In</button>

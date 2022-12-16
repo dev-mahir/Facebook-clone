@@ -23,45 +23,12 @@ const Register = ({ setRegister }) => {
     // current date 
     const date = new Date();
 
-    // Find current Month  
-    const isMonth = (month) => {
-        switch (month) {
-            case "Jan":
-                return 'Jan'
-            case "Feb":
-                return 'Feb'
-            case "Mar":
-                return 'Mar'
-            case "Apr":
-                return 'Apr'
-            case "May":
-                return 'May'
-            case "Jun":
-                return 'Jun'
-            case "Jul":
-                return 'Jul'
-            case "Aug":
-                return 'Aug'
-            case "Sept":
-                return 'Sept'
-            case "Oct":
-                return 'Oct'
-            case "Nov":
-                return 'Nov'
-            case "Dec":
-                return 'Dec'
-            default:
-                return false
-        }
-    }
-
-
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     // tooltip state 
     const [show, setShow] = useState(false);
+
 
     // form fields 
     const [input, setInput] = useState({
@@ -69,9 +36,9 @@ const Register = ({ setRegister }) => {
         sur_name: '',
         auth: '',
         password: '',
-        birth_date: '',
-        birth_month: '',
-        birth_year: '',
+        birth_date: date.getDate().toString(),
+        birth_month: month[date.getMonth()],
+        birth_year: date.getFullYear().toString(),
         gender: ''
     })
 
@@ -271,13 +238,13 @@ const Register = ({ setRegister }) => {
 
                                 <select name="birth_date" className={validate.day && "error-border"} onChange={handleInputChange} >
                                     {day.map((item, index) =>
-                                        <option value={item} key={index} selected={date.getDate() === item ? true : false}> {item}</option>
+                                        <option value={item} key={index} selected={item == input.birth_date  ? true : false}> {item}</option>
                                     )}
 
                                 </select>
                                 <select name="birth_month" onChange={handleInputChange} >
                                     {month.map((item, index) =>
-                                        <option value={item} key={index} selected={isMonth(item) === item ? true : false} >{item}</option>
+                                        <option value={item} key={index} selected={ item  === input.birth_month ? true : false} >{item}</option>
                                     )}
                                 </select>
                                 <select name="birth_year" onChange={handleInputChange} >

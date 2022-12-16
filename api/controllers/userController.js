@@ -658,7 +658,7 @@ export const checkPasswordResetOtp = async (req, res, next) => {
         if (userData.access_token == code) {
           return res
             .status(200)
-            .cookie("cpId", userData._id, {
+            .cookie("cpId", userData._id.toString(), {
               expires: new Date(Date.now() + 1000 * 60 * 15),
             })
             .cookie("code", code, {
@@ -681,7 +681,7 @@ export const checkPasswordResetOtp = async (req, res, next) => {
         if (userData.access_token == code) {
           return res
             .status(200)
-            .cookie("cpId", userData._id, {
+            .cookie("cpId", userData._id.toString(), {
               expires: new Date(Date.now() + 1000 * 60 * 15),
             })
             .cookie("code", code, {

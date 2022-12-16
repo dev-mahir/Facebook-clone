@@ -1,12 +1,34 @@
+import Cookies from 'js-cookie'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer/Footer'
 import ResetHeader from '../../components/ResetHeader/ResetHeader'
+import { changePassword } from '../../redux/auth/action'
+import { createToast } from '../../utility/toast'
 
 const Password = () => {
     const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
+
+    const handlePasswordChange = (e) => {
+        e.preventDefault();
+        if (!password) {
+            createToast("Password field is required")
+        } else {
+            dispatch(changePassword(
+                {
+                    password: password,
+                    id: Cookies.get('cpId'),
+                    code: Cookies.get('code')
+                },
+                navigate))
+        }
+
+    }
 
     return (
         <>
@@ -35,7 +57,7 @@ const Password = () => {
                             <a href="#" />
                             <div className="reset-btns">
                                 <Link className="cancel" to="/login">Skip</Link>
-                                <a className="continue" href="#" >Continue</a>
+                                <a className="continue" href="#" onClick={handlePasswordChange} >Continue</a>
                             </div>
                         </div>
                     </div>

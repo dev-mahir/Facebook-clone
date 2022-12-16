@@ -110,4 +110,27 @@ export const checkPasswordResetCode =
     } catch (error) {
       createToast(error.response.data.message);
     }
+    };
+  
+
+
+
+
+// check password reset otp code 
+export const changePassword =
+  (data, navigate) =>
+    async (dispatch) => {
+    try {
+      await axios
+        .post("/api/v1/user/user-password-reset", data)
+        .then((res) => {
+          createToast(res.data.message, 'success');
+          navigate("/login");
+        })
+        .catch((error) => {
+          createToast(error.response.data.message);
+        });
+    } catch (error) {
+      createToast(error.response.data.message);
+    }
   };
