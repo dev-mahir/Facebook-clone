@@ -4,10 +4,10 @@
 
 
 const initialState = {
-     user: {},
+     user: null,
      isLoggedIn: false,
      loading: false,
-     message: ''
+     message: null 
 }
 
 

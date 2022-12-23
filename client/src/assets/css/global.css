@@ -82,3 +82,17 @@
   margin: 0 !important;
   cursor: auto;
 }
+
+
+
+
+
+.create-post-header input {
+    width: 100%;
+    padding: 11px 10px;
+    margin-left: 11px;
+    border-radius: 27px;
+    outline: none;
+    border: none;
+    background: #f0f2f5;
+}

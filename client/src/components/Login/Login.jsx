@@ -1,11 +1,16 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import fbLogo from '../../assets/icons/facebook.svg';
+import { userLogin } from "../../redux/auth/action";
 import { createToast } from "../../utility/toast";
 
 
 const Login = ({ setRegister }) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [input, setInput] = useState({
         auth: "",
         password: ""
@@ -23,7 +28,7 @@ const Login = ({ setRegister }) => {
         if (!input.auth || !input.password) {
             createToast("All fields are required");
         } else {
-
+            dispatch( userLogin(input, navigate, setInput))
         }
 
     }

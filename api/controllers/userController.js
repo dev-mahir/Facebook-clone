@@ -223,35 +223,49 @@ export const resendActivation = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-
-    //validate form
-    if (!email || !password) {
-      next(createError(400, "All fields are required"));
+    const { auth, password } = req.body;
+    if (!auth || !password) { 
+        return next(createError(400, "All fields are required"));
     }
 
-    if (!isEmail(email)) {
-      next(createError(400, "Invalid Email Address"));
-    }
-
-    // email check
-    const loginUser = await User.findOne({ email });
-    if (!loginUser) {
-      next(createError(400, "Invalid email"));
-    } else {
-      // password verify
-      if (!passwordVarify(password, loginUser.password)) {
-        next(createError(400, "Wrong password"));
-      } else {
-        // create token
-        const token = createToken({ id: loginUser._id }, "365d");
-
-        res.status(200).cookie("authToken", token).json({
-          message: "Uset Login successfull",
-          user: loginUser,
-          token,
-        });
+    if (isEmail(auth)) {
+      const userCheck = await User.findOne({ email: auth });
+      if (!userCheck) {
+        return next(createError(400, "Invalid email"));
       }
+      if (userCheck) {
+        if (!passwordVarify(password, userCheck.password)) {
+          return next(createError(400, "Invalid password"));
+        }
+        if (passwordVarify(password, userCheck.password)) {
+          // create token
+          const token = createToken({ id: userCheck._id }, "365d");
+          res.status(200).cookie("authToken", token).json({
+            message: "User Login successfull",
+            user: userCheck
+          });
+        }
+      }
+    } else if (isPhone(auth)) {
+      const userCheck = await User.findOne({ mobile: auth });
+      if (!userCheck) {
+        return next(createError(400, "Invalid phone"));
+      }
+      if (userCheck) {
+        if (!passwordVarify(password, userCheck.password)) {
+          return next(createError(400, "Invalid password"));
+        }
+        if (passwordVarify(password, userCheck.password)) {
+          // create token
+          const token = createToken({ id: userCheck._id }, "365d");
+          res.status(200).cookie("authToken", token).json({
+            message: "User Login successfull",
+            user: userCheck
+          });
+        }
+      }
+    } else {
+      next(createError(400, "Invalid phone or email"));
     }
   } catch (error) {
     next(error);
