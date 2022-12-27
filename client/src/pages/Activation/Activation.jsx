@@ -1,11 +1,11 @@
 import React from 'react';
 import { useDispatch } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Footer from '../../components/Footer/Footer';
 import cookie from 'js-cookie'
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { activationByOTP, checkPasswordResetCode, resendLink } from '../../redux/auth/action';
+import { activationByOTP, checkPasswordResetCode, newOTPCode, resendLink } from '../../redux/auth/action';
 import { createToast } from '../../utility/toast';
 import ResetHeader from '../../components/ResetHeader/ResetHeader';
 
@@ -17,7 +17,7 @@ const Activation = () => {
     const navigate = useNavigate();
 
     // activation email 
-    const activationEmail = cookie.get('otp');
+    const auth = cookie.get('otp');
     // dispactch
     const dispatch = useDispatch();
     // code state 
@@ -35,47 +35,55 @@ const Activation = () => {
         }
         else {
             dispatch(activationByOTP(
-                { code: code, email: activationEmail },
-             navigate, cookie))
+                { code: code, auth: auth },
+                navigate, cookie))
         }
     }
 
     const handleActivationCancel = (e) => {
         e.preventDefault();
         cookie.remove('otp');
-        navigate('/login');
+        navigate('/');
     }
 
     // handle resend link 
     const handleResendLink = (e) => {
         e.preventDefault();
-        dispatch(resendLink(activationEmail))
+        setCode("")
+        dispatch(resendLink(auth))
     }
+
+
+
+    // handle resend code 
+    const handleResendCode = (e) => {
+        e.preventDefault();
+        setCode("");
+        dispatch(newOTPCode(auth))
+    }
+
 
 
 
     // handle password reset 
     const handlePasswordReset = (e) => {
         e.preventDefault();
-        console.log("okkkkkk");
+
         if (!code) {
             createToast("OTP code is required", 'warn');
         }
         else {
             dispatch(checkPasswordResetCode({
                 code: code,
-                auth: activationEmail
+                auth: auth
             }, navigate, cookie))
         }
     }
 
 
 
-
-
-
     useEffect(() => {
-        if (!activationEmail) {
+        if (!auth) {
             navigate('/login');
         }
     })
@@ -100,14 +108,14 @@ const Activation = () => {
                                 <input type="text" value={code} onChange={handleCodeChange} />
                                 <div className="code-text">
                                     <span>We sent your code to: </span>
-                                    <span>{activationEmail}</span>
+                                    <span>{auth}</span>
                                 </div>
                             </div>
                         </div>
                         <div className="reset-footer">
-                            <a href="#" onClick={handleResendLink}>Didn't get a code?</a>
+                            <a onClick={type === "reset-password" ? handleResendCode : handleResendLink} href="#">Didn't get a code?</a>
                             <div className="reset-btns">
-                                <a onClick={handleActivationCancel} className="cancel" href='#'>Cancel</a>
+                                <a href='#' onClick={handleActivationCancel} className="cancel">Cancel</a>
                                 <a className="continue" href="#" onClick={type === 'account' ? handleCodeContinue : handlePasswordReset}>Continue</a>
                             </div>
                         </div>

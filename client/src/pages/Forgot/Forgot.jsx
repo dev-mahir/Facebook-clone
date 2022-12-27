@@ -19,7 +19,7 @@ const Forgot = () => {
         } else {
             axios.post("/api/v1/user/find-account", {auth})
                 .then(res => {
-                    navigate('/find-account');
+                    navigate('/forgot-password');
                 })
                 .catch(error => {
                     createToast(error.response.data.message);

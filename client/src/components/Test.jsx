@@ -1,11 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom'
-import Tooltip from "../Tooltip/Tooltip";
+import { Link } from 'react-router-dom'
 import { MdError } from 'react-icons/md';
-import { createToast } from '../../utility/toast'
-import { userRegister } from "../../redux/auth/action";
 import { useDispatch } from 'react-redux'
+import { createToast } from "../utility/toast";
 
 
 
@@ -16,23 +14,14 @@ const years = Array.from({ length: 118 }, (_, i) => new Date().getFullYear() - i
 
 
 
-const Register = ({ setRegister, loginLink }) => {
+const Test = ({ setRegister, loginLink }) => {
     const [custom_gender, setCustom_gender] = useState(false)
 
     // current date 
     const date = new Date();
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
-    // tooltip state 
-    const [show, setShow] = useState(false);
-
-
-    // Empty field check 
-    const [isEmpty, setIsEmpty] = useState({
-
-    });
 
 
 
@@ -51,29 +40,7 @@ const Register = ({ setRegister, loginLink }) => {
     const { first_name, sur_name, auth, password, birth_date, birth_month, birth_year, gender } = input;
 
 
-    // form validate state 
-    const [validate, setValidate] = useState({
-        first_name: false,
-        sur_name: false,
-        auth: false,
-        password: false,
-        birth_date: false,
-        birth_month: false,
-        birth_year: false,
-        gender: false
 
-    })
-
-    // tooltip hide/show state 
-    const [tooltip, setTooltip] = useState({
-        first_name: false,
-        sur_name: false,
-        auth: false,
-        password: false,
-        day: false,
-        month: false,
-        year: false,
-    })
 
     // input state update 
     const handleInputChange = (e) => {
@@ -82,60 +49,96 @@ const Register = ({ setRegister, loginLink }) => {
             [e.target.name]: e.target.value
         }));
 
-        setIsEmpty((prevState) => ({
-            ...prevState,
-         [e.target.name]: e.target.value
-        }))
-
-    
     }
 
+    const [showFocus, setShowFocus] = useState({
+        first_name: false,
+        sur_name: false,
+        auth: false,
+        password: false,
+        birth_date: false,
+        birth_month: false,
+        birth_year: false,
+        gender: false
+    })
 
-    // handle input validate 
+
+    const [errorBorder, setErrorBorder] = useState({
+        first_name: false,
+        sur_name: false,
+        auth: false,
+        password: false,
+        birth_date: false,
+        birth_month: false,
+        birth_year: false,
+        gender: false
+    })
+
+    const [errorFocus, setErrorFocus] = useState({
+        first_name: false,
+        sur_name: false,
+        auth: false,
+        password: false,
+        birth_date: false,
+        birth_month: false,
+        birth_year: false,
+        gender: false
+    })
+
+
+
+
+    // blur 
     const handleInputValidate = (e) => {
-        const fieldName = e.target.name;
+        let fieldName = e.target.name;
         if (!input[fieldName]) {
-            setValidate((prevState) => ({
+            setErrorBorder((prevState) => ({
                 ...prevState,
-                [fieldName]: true
-            }))
-            setShow(true)
+                [e.target.name]: true
+            }));
+            setShowFocus((prevState) => ({
+                ...prevState,
+                [e.target.name]: true
+            }));
 
-            setTooltip((prevState) => ({
+            setErrorFocus((prevState) => ({
                 ...prevState,
-                [fieldName]: false
+                [e.target.name]: false
             }))
+
+
         } else {
-            setValidate((prevState) => ({
+            setErrorBorder((prevState) => ({
                 ...prevState,
-                [fieldName]: false
-            }))
-            setShow(false)
+                [e.target.name]: false
+            }));
+            setShowFocus((prevState) => ({
+                ...prevState,
+                [e.target.name]: false
+            }));
+
         }
+
+
     }
 
 
-    //hanldle  input validate on focus
+    // focus 
     const handleInputValidateFocus = (e) => {
-        const fieldName = e.target.name;
-        setValidate((prevState) => ({
-            ...prevState,
-            [fieldName]: false
-        }))
-
-        if (show) {
-            setTooltip((prevState) => ({
+        let fieldName = e.target.name;
+        if (!input[fieldName]) {
+            setErrorFocus((prevState) => ({
                 ...prevState,
-                [fieldName]: true
+                [e.target.name]: true
+            }));
+
+        } else {
+            setErrorFocus((prevState) => ({
+                ...prevState,
+                [e.target.name]: false
             }))
         }
     }
-
-
-
-    // field empty check and show error
-
-
 
 
 
@@ -146,127 +149,63 @@ const Register = ({ setRegister, loginLink }) => {
         if (!input.first_name || !input.sur_name || !input.auth || !input.password || !input.gender) {
             createToast("All fields are required");
 
-            setIsEmpty((prevState) => ({
-                ...prevState,
-                first_name: input.first_name,
-                sur_name: input.sur_name,
-                auth: input.auth,
-                password: input.password,
-                birth_date: input.birth_date,
-                birth_month: input.birth_month,
-                birth_year: input.birth_year,
-                gender: input.gender
-
-            }))
-
-
 
         } else {
-            setIsEmpty((prevState) => ({
-                ...prevState,
-                first_name: input.first_name,
-                sur_name: input.sur_name,
-                auth: input.auth,
-                password: input.password,
-                birth_date: input.birth_date,
-                birth_month: input.birth_month,
-                birth_year: input.birth_year,
-                gender: input.gender
 
-            }))
-            dispatch(userRegister(
-                {
-                    first_name,
-                    sur_name,
-                    auth,
-                    password,
-                    birth_date,
-                    birth_month,
-                    birth_year,
-                    gender
-                }
-                , setInput,
-                e, setRegister, navigate
-            ))
 
         }
     }
 
+    console.log(showFocus);
+    console.log(errorFocus);
 
     return <>
 
-        <div className="sign-up-body">
+        <div className="sign-up-body" style={{ width: "420px", marginLeft: "auto", marginRight: "auto" }}>
             <form onSubmit={handleRegister}>
                 <div className="reg-form reg-form-inline">
                     <div className="input-box">
-
-                        {(!first_name && tooltip.first_name) && <Tooltip
-                            msg="What's your first name"
-                            right="207px"
-                            top="2px"
-                        />}
-
-
+                        {(errorFocus.first_name) && "kjdkfkd"}
                         <input
                             name="first_name"
                             type="text"
-                            className={`  ${validate.first_name && "error-border"}   ${isEmpty.first_name === "" && "error-border"}`}
+                            className={`${errorBorder.first_name && "error-border"}`}
                             onBlur={handleInputValidate}
                             onFocus={handleInputValidateFocus}
                             onChange={handleInputChange}
                             placeholder="First Name" value={input.first_name} />
-
-                        {(validate.first_name || isEmpty.first_name === "") && <span className="error-icon"><MdError /> </span>}
-
+                        {errorBorder.first_name && <span className="error-icon"> <MdError /> </span>}
                     </div>
 
                     <div className="input-box">
-                        {( !sur_name && tooltip.sur_name) && <Tooltip
-                            msg="What's your sur name"
-                            right="60px"
-                            top="50px"
-                            angle="top"
-                        />}
-
                         <input
                             type="text"
-                            className={`  ${validate.sur_name && "error-border"}   ${isEmpty.sur_name === "" && "error-border"}`}
                             name="sur_name"
                             onBlur={handleInputValidate}
                             onChange={handleInputChange}
                             onFocus={handleInputValidateFocus}
                             placeholder="Surname" value={input.sur_name} />
+                        {errorBorder.sur_name && <span className="error-icon"> <MdError /> </span>}
 
-                        {(validate.sur_name || isEmpty.sur_name === "") && <span className="error-icon"><MdError /> </span>}
                     </div>
 
                 </div>
                 <div className="reg-form">
                     <div className="input-box email">
-                        {( !auth && tooltip.auth) && <Tooltip
-                            msg="You'll use this when you log in  and if you ever need to reset your password"
-                            left="-235px"
-                            width="370px"
-                        />}
                         <input type="text"
                             name="auth"
-                            className={` ${validate.auth && "error-border"}   ${isEmpty.auth === "" && "error-border"}`}
                             onChange={handleInputChange}
                             value={input.auth}
                             onBlur={handleInputValidate}
                             onFocus={handleInputValidateFocus}
                             placeholder="Mobile number or email address" />
-                        {(validate.auth || isEmpty.auth === "") && <span className="error-icon"><MdError /> </span>}
+                        {errorBorder.auth && <span className="error-icon"> <MdError /> </span>}
 
                     </div>
                 </div>
                 <div className="reg-form">
                     <div className="input-box">
-                        {(!password && tooltip.password) && <Tooltip
-                            msg="Enter a combination of at least six numbers, letters and punctuation marks (such as ! and &)"
-                            left="-275px"
-                            width="240px"
-                        />}
+
                         <input type="password"
                             name="password"
                             onChange={handleInputChange}
@@ -274,31 +213,33 @@ const Register = ({ setRegister, loginLink }) => {
 
                             onBlur={handleInputValidate}
                             onFocus={handleInputValidateFocus}
-                            className={` ${validate.password && "error-border"}   ${isEmpty.password === "" && "error-border"}`}
                             placeholder="New password" />
+                        {errorBorder.password && <span className="error-icon"> <MdError /> </span>}
 
-                        {(validate.password || isEmpty.password === "") && <span className="error-icon"><MdError /> </span>}
+
                     </div>
                 </div>
                 <div className="reg-form">
                     <span>Date of birth</span>
-                    <div className="reg-form-select" style={{position: "relative"}}>
+                    <div className="reg-form-select">
 
+                        <div>
+                            {(errorBorder.birth_year ==  date.getFullYear()) && <span className="error-icon"> <MdError /> </span>}
 
-                        {(validate.birth_year || isEmpty.birth_year === "2022") && <span className="error-icon" style={{ top: "-20px" }}><MdError /> </span>}
-
-                        <select name="birth_date" className={isEmpty.birth_year == date.getFullYear() && "error-border"} onChange={handleInputChange} >
+                        </div>
+                        <select name="birth_date" onChange={handleInputChange} >
                             {day.map((item, index) =>
                                 <option value={item} key={index} selected={item === input.birth_date ? true : false}> {item}</option>
                             )}
 
                         </select>
-                        <select name="birth_month" className={isEmpty.birth_year == date.getFullYear() && "error-border"} onChange={handleInputChange} >
+                        <select name="birth_month" onChange={handleInputChange} >
                             {month.map((item, index) =>
                                 <option value={item} key={index} selected={item === input.birth_month ? true : false} >{item}</option>
                             )}
                         </select>
-                        <select name="birth_year" className={`${isEmpty.birth_year == date.getFullYear() && "error-border"}  ${input.birth_year === date.getFullYear() && "error-border"}        `} onChange={handleInputChange} >
+                          
+                        <select name="birth_year" onChange={handleInputChange}   onBlur={handleInputValidate} >
                             {years.map((item, index) =>
                                 <option value={item} key={index} selected={date.getFullYear() === item ? true : false}>{item}  </option>
                             )}
@@ -311,18 +252,18 @@ const Register = ({ setRegister, loginLink }) => {
                 <div className="reg-form">
                     <span>Gender</span>
                     <div className="reg-form-select">
-                        <label className={` ${validate.gender && "error-border"}   ${isEmpty.gender === "" && "error-border"}`}>
+                        <label>
                             Female
                             <input type="radio" name="gender" value="Male" onChange={handleInputChange} />
                         </label>
-                        <label className={` ${validate.gender && "error-border"}   ${isEmpty.gender === "" && "error-border"}`}>
+                        <label>
                             Male
                             <input type="radio" name="gender" value="Female" onChange={handleInputChange} />
                         </label>
-                        <div style={{ position: "relative" }}>
-                            {(validate.gender || isEmpty.gender === "") && <span className="error-icon" style={{ top: "-20px" }}><MdError /> </span>}
+                        <div>
 
-                            <label className={` ${validate.gender && "error-border"}   ${isEmpty.gender === "" && "error-border"}`} htmlFor="custom_gender" onClick={() => setCustom_gender(!custom_gender)}  >
+
+                            <label>
                                 Custom
                                 <input id="custom_gender" type="radio" name="gender" onChange={handleInputChange} />
                             </label>
@@ -371,4 +312,4 @@ const Register = ({ setRegister, loginLink }) => {
     </>;
 };
 
-export default Register;
+export default Test;

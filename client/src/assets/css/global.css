@@ -27,15 +27,15 @@
   border-color: transparent transparent transparent #be4b49;
 }
 .tooltip-box .tooltip.top::after {
-    position: absolute;
-    content: "";
-    top: -6px;
-    right: 102px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 6px 8px 6px;
-    border-color: transparent transparent #be4b49 transparent;
+  position: absolute;
+  content: "";
+  top: -6px;
+  right: 102px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 6px 8px 6px;
+  border-color: transparent transparent #be4b49 transparent;
 }
 .tooltip-box .tooltip p {
   color: #fff;
@@ -83,16 +83,51 @@
   cursor: auto;
 }
 
-
-
-
-
 .create-post-header input {
-    width: 100%;
-    padding: 11px 10px;
-    margin-left: 11px;
-    border-radius: 27px;
-    outline: none;
-    border: none;
-    background: #f0f2f5;
+  width: 100%;
+  padding: 11px 10px;
+  margin-left: 11px;
+  border-radius: 27px;
+  outline: none;
+  border: none;
+  background: #f0f2f5;
+}
+
+.auth-box h4 {
+  padding-bottom: 15px;
+  text-align: center;
+}
+
+.login-page img {
+  width: 300px;
+  margin: 0 auto;
+}
+.login-page {
+  height: 100%;
+}
+.login-page .auth-box {
+  margin-bottom: 100px;
+}
+
+.login-page .login-footer {
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+}
+
+.login-page .login-footer a {
+  font-weight: 400;
+}
+
+.registerPage .sign-up-card {
+  position: static;
+  margin: 0 auto;
+  transform: none;
+}
+
+.registerPage .logo {
+  text-align: center;
+}
+.registerPage .logo img {
+  width: 270px;
 }

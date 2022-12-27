@@ -12,6 +12,7 @@ import {
   sendPasswordResetOTP,
   checkPasswordResetOtp,
   passwordReset,
+  newOTPCode,
 } from "../controllers/userController.js";
 
 // init router 
@@ -37,6 +38,8 @@ router.post("/send-password-reset-otp", sendPasswordResetOTP);
 router.post("/check-password-reset-otp", checkPasswordResetOtp);
 
 router.post("/user-password-reset", passwordReset);
+
+router.post("/new-otp-code", newOTPCode);
 
 
 

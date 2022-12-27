@@ -1,7 +1,5 @@
-import { Children } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from 'react-router-dom'
-
 
 
 
@@ -9,7 +7,7 @@ import { Navigate } from 'react-router-dom'
 const AuthReject = ({ children}) => {
      const { isLoggedIn } = useSelector((state) => state.auth);
      
-     return  isLoggedIn ? children :  <Navigate to="/login"/>
+     return  isLoggedIn ?  <Navigate to="/" /> : children
 
 };
 

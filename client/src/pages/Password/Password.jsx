@@ -49,7 +49,7 @@ const Password = () => {
                                 <input
                                     onChange={(e) => setPassword(e.target.value)}
                                     value={password}
-                                    className="w-100" type="text" placeholder="New password"
+                                    className="w-100" type="password" placeholder="New password"
                                 />
                             </div>
                         </div>

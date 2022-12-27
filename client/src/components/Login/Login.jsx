@@ -68,7 +68,7 @@ const Login = ({ setRegister }) => {
                             </div>
                         </form>
 
-                        <Link to='/forgot-password'>Forgotten password?</Link>
+                        <Link to='/find-account'>Forgotten password?</Link>
 
                         <div className="divider"></div>
 

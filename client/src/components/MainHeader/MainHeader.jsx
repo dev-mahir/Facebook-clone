@@ -1,7 +1,9 @@
 import React from 'react'
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import favicon from '../../assets/icons/favicon.ico';
+import { userLogOut } from '../../redux/auth/action';
 import Avatar from '../Avatar/Avatar';
 import Avater from '../Avatar/Avatar';
 
@@ -9,6 +11,17 @@ const MainHeader = () => {
     const { user } = useSelector((state) => state.auth);
 
     const [userMenu, setUserMenu] = useState(false);
+
+    const navigate = useNavigate()
+
+    const dispatch = useDispatch();
+
+
+    const handleUserLogout = (e) => { 
+        e.preventDefault();
+        dispatch(userLogOut(navigate))
+
+    }
 
 
     return (
@@ -55,13 +68,15 @@ const MainHeader = () => {
                         {userMenu
                             && <div className="user-menu-dropdown">
                                 <div className="user-menu-box">
-                                    <div className="user-data-box">
+                                    <div className="user-data-box">            <Link to="/profile">
                                         <div className="user-data-box-item">
 
-                                            <Avatar />
+                                
+                                                <Avatar />
 
-                                            <span>{`${user.first_name} ${user.sur_name}`}</span>
-                                        </div>
+                                                <span>{`${user.first_name} ${user.sur_name}`}</span>
+                                     
+                                        </div>       </Link>
                                         <div className="divider-0"></div>
                                         <a href="#">See all profiles</a>
                                     </div>
@@ -101,7 +116,7 @@ const MainHeader = () => {
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#">
+                                            <a href="#" onClick={handleUserLogout}>
                                                 <div className="user-menu-icon"></div>
                                                 <div className="user-menu-item">
                                                     <span>Logout</span>

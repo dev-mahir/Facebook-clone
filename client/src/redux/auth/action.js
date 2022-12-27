@@ -12,6 +12,7 @@ import {
   TOKEN_USER_FAILED,
   TOKEN_USER_REQUEST,
   TOKEN_USER_SUCCESS,
+  USER_LOGOUT,
 } from "./actionTypes";
 
 // user register
@@ -52,21 +53,24 @@ export const userRegister =
           });
         });
     } catch (error) {
-      console.log(error);
+        createToast(error.response.data.message, "warn");
+
     }
   };
 
+  
 // user account activation by otp
 export const activationByOTP =
-  ({ code, email }, navigate, cookie) =>
-  async (dispatch) => {
+  ({ code, auth }, navigate, cookie) =>
+    async (dispatch) => {
+    console.log(auth);
     try {
       await axios
-        .post("/api/v1/user/code-activation", { code: code, email: email })
+        .post("/api/v1/user/code-activation", { code: code, auth: auth } )
         .then((res) => {
           createToast("User account Activate", "success");
           cookie.remove("otp");
-          navigate("/login");
+          navigate("/");
         })
         .catch((error) => {
           createToast(error.response.data.message);
@@ -76,6 +80,7 @@ export const activationByOTP =
     }
   };
 
+
 // resend link
 export const resendLink = (email, navigate) => async (dispatch) => {
   try {
@@ -83,7 +88,6 @@ export const resendLink = (email, navigate) => async (dispatch) => {
       .post("/api/v1/user/resend-activate", { auth: email })
       .then((res) => {
         createToast(res.data.message, "success");
-        navigate("/activation/account");
       })
       .catch((error) => {
         createToast(error.response.data.message);
@@ -92,6 +96,27 @@ export const resendLink = (email, navigate) => async (dispatch) => {
     createToast(error.response.data.message);
   }
 };
+
+
+
+
+// resend new otp code 
+export const newOTPCode = (auth) => async (dispatch) => {
+  try {
+    await axios
+      .post("/api/v1/user/new-otp-code", { auth: auth })
+      .then((res) => {
+        createToast(res.data.message, "success");
+      })
+      .catch((error) => {
+        createToast(error.response.data.message);
+      });
+  } catch (error) {
+    createToast(error.response.data.message);
+  }
+};
+
+
 
 // check password reset otp code
 export const checkPasswordResetCode =
@@ -120,7 +145,7 @@ export const changePassword = (data, navigate) => async (dispatch) => {
       .post("/api/v1/user/user-password-reset", data)
       .then((res) => {
         createToast(res.data.message, "success");
-        navigate("/login");
+        navigate("/");
       })
       .catch((error) => {
         createToast(error.response.data.message);
@@ -143,6 +168,7 @@ export const userLogin = (data, navigate, setInput) => async (dispatch) => {
         }));
         navigate("/");
         dispatch({ type: LOGIN_SUCCESS, payload: res.data.user });
+        createToast("Login success", "success");
         dispatch(loader_start());
       })
       .catch((error) => {
@@ -155,27 +181,36 @@ export const userLogin = (data, navigate, setInput) => async (dispatch) => {
 };
 
 // token user
-export const tokenUser = (navigate) => async (dispatch) => {
-  const token = Cookies.get("authToken")
+export const tokenUser = (token) => async (dispatch) => {
   dispatch({ type: TOKEN_USER_REQUEST });
   try {
     await axios
       .get("/api/v1/user/me", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         dispatch({ type: TOKEN_USER_SUCCESS, payload: res.data.user });
         dispatch(loader_start());
-        // navigate("/");
       })
       .catch((error) => {
-        createToast(error.response.data.message);
         dispatch({ type: TOKEN_USER_FAILED });
+        createToast(error.response.data.message);
+        dispatch(userLogOut());
       });
   } catch (error) {
-    createToast(error.response.data.message);
     dispatch({ type: TOKEN_USER_FAILED });
+    createToast(error.response.data.message);
+    dispatch(userLogOut());
   }
+};
+
+
+// user logout
+export const userLogOut = (navigate) => async (dispatch) => {
+  dispatch(loader_start());
+  Cookies.remove("authToken");
+  dispatch({ type: USER_LOGOUT });
+  navigate("/");
 };
