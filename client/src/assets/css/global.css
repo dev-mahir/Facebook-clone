@@ -131,3 +131,251 @@
 .registerPage .logo img {
   width: 270px;
 }
+
+.fb-body-wrapper {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+.fb-body-wrapper .fb-home-timeline {
+  width: 100%;
+}
+
+.user-profile-personal-info {
+  width: 40%;
+}
+
+.fb-profile-body {
+  min-height: 300px;
+  width: 100%;
+  background-color: #f0f2f5;
+  padding-top: 25px;
+}
+
+.fb-card {
+  width: 100%;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 2px 3px rgb(0 0 0 / 10%), 0 0px 0px rgb(0 0 0 / 10%);
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.user-personal-info h3 {
+  font-size: 22px;
+  font-family: inherit;
+}
+.user-personal-info .bio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.personal-info-button {
+  width: 100%;
+  height: 35px;
+  cursor: pointer !important;
+  border: none;
+  background-color: #d8dadf;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.personal-info-button:hover {
+  background-color: #c1c4ca;
+}
+
+.fb-profile-header {
+  margin-top: 57px;
+  background-color: #fff;
+  z-index: 999;
+  box-shadow: 0 2px 3px rgb(0 0 0 / 10%), 0 0px 0px rgb(0 0 0 / 10%);
+  position: relative;
+}
+
+.personail-details ul {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
+.personail-details ul li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.personail-details ul li img {
+  filter: contrast(0.001);
+}
+
+.personail-details ul li .bold-text {
+  font-weight: bold;
+  color: #222;
+  cursor: pointer;
+}
+
+.personail-details ul li .bold-text:hover {
+  text-decoration: underline;
+}
+
+.hobbies-list {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 15px 0;
+}
+.hobbies-list-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px 15px;
+  border-radius: 50px;
+}
+.hobbies-list-item:hover {
+  background-color: #e7e9f0;
+}
+.hobbies-list-item img {
+  width: 15px;
+  height: 15px;
+}
+.hobbies-list-item span {
+  font-weight: 500;
+}
+
+.profile-featured {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.profile-featured-gallery {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.profile-featured-item {
+  margin-bottom: 10px;
+  width: 32%;
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.profile-featured-photo {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 10px;
+  background-position: center;
+  cursor: pointer;
+  transition: 0.3s;
+  filter: brightness(0.9);
+  background-size: cover;
+}
+.profile-featured-photo:hover {
+  filter: brightness(0.7);
+  transform: scale(1.1);
+  overflow: hidden;
+}
+.profile-featured-item .featured-count {
+  color: #fff;
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 14px;
+  z-index: 9999;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile-header a {
+  color: #216fdb;
+}
+
+.gallery-area {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.gallery-area a {
+  height: 105px;
+  transition: 0.2s ease;
+}
+.gallery-area a:hover {
+  filter: brightness(0.9);
+  transition: 0.2s ease;
+}
+
+.gallery-area a img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friends-count {
+  color: #606770;
+}
+
+.profile-friends-item {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.profile-friends-item a {
+  width: 31%;
+}
+.profile-friends-item .friends-card .card-image {
+  height: 105px;
+}
+.profile-friends-item .friends-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+.profile-friends-item .friends-card img:hover {
+  filter: brightness(0.9);
+  transition: 0.3s ease;
+}
+.profile-friends-item .friends-card .friends-name {
+  font-size: 14px;
+  font-weight: 600;
+  height: 38px;
+  color: #4f5157;
+}
+.profile-friends-item .friends-card .friends-name:hover {
+  text-decoration: underline;
+}
+
+.profile-action button:last-child {
+  background: #216fdb;
+  color: white;
+}
+
+.profile-action button:nth-child(3) span:first-child {
+  filter: invert(100%);
+}

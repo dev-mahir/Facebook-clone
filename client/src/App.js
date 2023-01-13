@@ -20,6 +20,7 @@ import Friends from "./components/Friends/Friends";
 import LoggedInRoute from "./privateRoute/LoggedInRoute";
 import LoggedOutRoute from "./privateRoute/LoggedOutRoute";
 import Test from "./components/Test";
+import FriendsPage from "./pages/Friends/FriendsPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -43,13 +44,13 @@ function App() {
         onLoaderFinished={() => dispatch(loader_end())}
       />
 
-      <ToastContainer style={{ zIndex: 99999 }} />
+      <ToastContainer style={{ zIndex:9999999999 }} />
       <Routes>
         <Route path="/" element={<Home />}></Route>
 
         <Route element={<LoggedInRoute />}>
           <Route path="/profile" element={<Profile />}></Route>
-          <Route path="/friends" element={<Friends />}></Route>
+          <Route path="/friends" element={<FriendsPage />}></Route>
         </Route>
 
         <Route element={<LoggedOutRoute />}>
