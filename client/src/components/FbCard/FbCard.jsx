@@ -7,9 +7,6 @@ const FbCard = ({ children}) => {
           <div className="card-wrapper">
               {children }
           </div>
-          
-      
-
       </div>
   )
 }

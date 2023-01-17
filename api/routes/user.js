@@ -13,6 +13,7 @@ import {
   checkPasswordResetOtp,
   passwordReset,
   newOTPCode,
+  userProfileUpdate,
 } from "../controllers/userController.js";
 
 // init router 
@@ -24,6 +25,8 @@ const router = express.Router();
 router.post('/login', login)
 router.post('/register', register)
 router.get('/me', loggedInUser)
+
+router.put('/profile-update/:id', userProfileUpdate)
 
 router.get('/activate/:token', activateAccountByLink)
 

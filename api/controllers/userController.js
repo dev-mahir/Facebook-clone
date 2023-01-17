@@ -318,6 +318,33 @@ export const loggedInUser = async (req, res, next) => {
 
 /**
  * @access public
+ * @route /api/user/profile-update/:id
+ * @method PUT
+ */
+
+
+export const userProfileUpdate = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const { id } = req.params;
+
+    const user = await User.findByIdAndUpdate(id, data, {new: true});
+    if (user) {
+      res.status(200).json({
+        message: "Profile updated successfull",
+        user
+      });
+    }
+    if (!user) {
+      return next(createError(400, "Profile update failed"));
+    }
+  } catch (error) {
+    next(next);
+  }
+};
+
+/**
+ * @access public
  * @route /api/user/activate/:token
  * @method GET
  */
@@ -371,11 +398,6 @@ export const activateAccountByCode = async (req, res, next) => {
   try {
     const { code, auth } = req.body;
 
-    console.log(req.body);
-    
-
-
-
     const user = await User.findOne().or([{ email: auth }, { mobile: auth }]); // match  phone or email
 
     if (!user) {
@@ -401,14 +423,6 @@ export const activateAccountByCode = async (req, res, next) => {
     next(error);
   }
 };
-
-
-
-
-
-
-
-
 
 /**
  * Forgot password

@@ -13,6 +13,7 @@ import {
   TOKEN_USER_REQUEST,
   TOKEN_USER_SUCCESS,
   USER_LOGOUT,
+  USER_PROFILE_UPDATE,
 } from "./actionTypes";
 
 // user register
@@ -205,6 +206,28 @@ export const tokenUser = (token) => async (dispatch) => {
     dispatch(userLogOut());
   }
 };
+
+
+
+// user profile update
+export const profileUpdate = (id, data, setBioShow) => async (dispatch) => {
+  try {
+    await axios
+      .put(`/api/v1/user/profile-update/${id}`, data)
+      .then((res) => {
+        console.log(res.data.user);
+        dispatch({ type: USER_PROFILE_UPDATE, payload: res.data.user });
+        setBioShow(false);
+        createToast(res.data.message, "success");
+      })
+      .catch((error) => {
+        createToast(error.response.data.message);
+      });
+  } catch (error) {
+    createToast(error.response.data.message);
+  }
+};
+
 
 
 // user logout

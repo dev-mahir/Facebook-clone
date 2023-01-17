@@ -379,3 +379,82 @@
 .profile-action button:nth-child(3) span:first-child {
   filter: invert(100%);
 }
+
+.click-update {
+  width: 100%;
+}
+
+.click-update textarea {
+  width: 100%;
+  height: 60px;
+  border: 1px solid #ced0d4;
+  border-radius: 5px;
+  font-family: inherit;
+  text-align: center;
+  outline: none;
+  padding: 10px;
+  font-size: 15px;
+  background-color: #f0f2f5;
+}
+
+.click-update textarea:focus {
+  border: 1px solid #166fe5;
+  background-color: white;
+}
+.click-update textarea:hover {
+  background: #ced0d483;
+}
+.click-update {
+  text-align: right;
+  color: #8a8e95;
+}
+.click-update .click-update-btn {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.click-update .bio-btn {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.click-update .global-icon {
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+}
+
+
+
+
+
+.click-update .bio-status {
+  color: #222;
+  display: flex;
+  align-items: center;
+}
+.click-update .bio-btn button {
+  font-weight: 600;
+  background: #f0f2f5;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.click-update .bio-btn button:hover {
+  background: #d5d9dc;
+}
+
+
+.save-btn{
+  background-color: #216fdb !important;
+  color: white;
+}
+
+
+
+
+

@@ -17,4 +17,7 @@ export const TOKEN_USER_FAILED = "TOKEN_USER_FAILED";
 export const USER_LOGOUT = "USER_LOGOUT";
 
 
+export const USER_PROFILE_UPDATE = "USER_PROFILE_UPDATE";
+
+
 
