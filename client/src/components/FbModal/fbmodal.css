@@ -1,5 +1,5 @@
 .blur-box{
-  z-index: 999999999;
+  z-index: 99999 !important;
 }
 
 
@@ -9,7 +9,6 @@
   justify-content: center;
   height: 100vh;
 }
-
 
 
 .fb-modal-popup{
@@ -47,11 +46,6 @@ width: 100%;
 }
 
 
-.fb-modal-body{
-    padding:  0 10px 10px 10px;
-    
-}
-.fb-modal-footer{}
 
 
 .fb-modal-wrapper .divider {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Avatar from '../Avatar/Avatar';
 
 
@@ -95,10 +96,10 @@ const ProfileHeader = () => {
               <div class="fb-profile-menu">
                   <ul>
                       <li><a href="#">Posts</a></li>
-                      <li><a href="#">About</a></li>
-                      <li><a href="#">Followers</a></li>
-                      <li><a href="#">Photos</a></li>
-                      <li><a href="#">Videos</a></li>
+                      <li><Link to="/profile/about">About</Link></li>
+                      <li><Link to="/profile/followers">Followers</Link></li>
+                      <li><Link to="/profile/photos">Photos</Link></li>
+                      <li><Link to="/profile/videos">Videos</Link></li>
                       <li><a href="#">Articlse</a></li>
                       <li><a href="#">More</a></li>
                   </ul>

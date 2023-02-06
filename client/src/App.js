@@ -11,16 +11,21 @@ import FindAccount from "./pages/FindAccount/FindAccount";
 import Password from "./pages/Password/Password";
 import { useDispatch, useSelector } from "react-redux";
 import { loader_end } from "./redux/top-loader/action";
-import AuthReject from "./privateRoute/AuthReject";
 import { tokenUser } from "./redux/auth/action";
 import Cookies from "js-cookie";
 import Login from "./pages/Login/Login";
 import RegisterPage from "./pages/Register/RegisterPage";
-import Friends from "./components/Friends/Friends";
 import LoggedInRoute from "./privateRoute/LoggedInRoute";
 import LoggedOutRoute from "./privateRoute/LoggedOutRoute";
-import Test from "./components/Test";
 import FriendsPage from "./pages/Friends/FriendsPage";
+import AboutPage from "./pages/About/AboutPage";
+import WorkAndEducation from "./components/Profile/About/WorkAndEducation";
+import LifeEvents from "./components/Profile/About/LifeEvents";
+import Transparency from "./components/Profile/About/Transparency";
+import Privacy from "./components/Profile/About/Privacy";
+import Contact from "./components/Profile/About/Contact";
+import PlacesLived from "./components/Profile/About/PlacesLived";
+import Follower from "./components/Profile/Follower/Follower";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,7 +39,8 @@ function App() {
     if (token) {
       tokenDispatch(tokenUser(token));
     }
-  }, [token, tokenDispatch]);
+    // }, [token, tokenDispatch]);
+  }, []);
 
   return (
     <>
@@ -44,12 +50,33 @@ function App() {
         onLoaderFinished={() => dispatch(loader_end())}
       />
 
-      <ToastContainer style={{ zIndex:9999999999 }} />
+      <ToastContainer style={{ zIndex: 99999999 }} />
       <Routes>
         <Route path="/" element={<Home />}></Route>
 
         <Route element={<LoggedInRoute />}>
-          <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/profile" element={<Profile />}>
+            <Route path="followers" element={<Follower />}></Route>
+
+            <Route path="about" element={<AboutPage />}></Route>
+            <Route path="about_overview" element={<AboutPage />}></Route>
+            <Route
+              path="about_work_and_education"
+              element={<WorkAndEducation />}></Route>
+            <Route path="about_places" element={<PlacesLived />}></Route>
+            <Route
+              path="about_contact_and_basic_info"
+              element={<Contact />}></Route>
+            <Route
+              path="about_privacy_and_legal_info"
+              element={<Privacy />}></Route>
+            <Route
+              path="about_profile_transparency"
+              element={<Transparency />}></Route>
+            <Route path="about_details" element={<AboutPage />}></Route>
+            <Route path="about_life_events" element={<LifeEvents />}></Route>
+          </Route>
+
           <Route path="/friends" element={<FriendsPage />}></Route>
         </Route>
 
@@ -62,8 +89,6 @@ function App() {
         <Route path="/find-account" element={<Forgot />}></Route>
         <Route path="/forgot-password" element={<FindAccount />}></Route>
         <Route path="/change-password" element={<Password />}></Route>
-
-        <Route path="/test" element={<Test />}></Route>
       </Routes>
     </>
   );

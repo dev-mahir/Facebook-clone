@@ -6,26 +6,25 @@ import CreatPost from "../../components/Timeline/CreatePost";
 import ProfileInro from "../../components/Profile/ProfileIntro/ProfileInro";
 import ProfileGallery from "../../components/Profile/ProfileGallery/ProfileGallery";
 import Friends from "../../components/Profile/Friends/Friends";
+import { Outlet, useLocation, useParams } from "react-router-dom";
+import PostSection from "../../components/Profile/PostSection";
+
+
 
 const Profile = () => {
 
+  const { pathname } = useLocation();
+  const path = pathname.split('/')[1]
 
   return <>
     <MainHeader />
     <ProfileHeader />
     <div class="fb-profile-body">
       <div className="fb-body-wrapper">
-        <div className="user-profile-personal-info">
-          <ProfileInro />
-          <ProfileGallery />
-          <Friends />
-        </div>
-        <div className="user-profile-posts">
-          <div className="fb-home-timeline">
-            <CreatPost />
-            <UserPost />
-          </div>
-        </div>
+        <Outlet />
+
+        {pathname === "/profile" && <PostSection />}
+        
       </div>
     </div>
 

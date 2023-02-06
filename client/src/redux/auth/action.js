@@ -210,14 +210,15 @@ export const tokenUser = (token) => async (dispatch) => {
 
 
 // user profile update
-export const profileUpdate = (id, data, setBioShow) => async (dispatch) => {
+export const profileUpdate = (id, dat, setModalShow) => async (dispatch) => {
+  console.log(dat);
+
   try {
     await axios
-      .put(`/api/v1/user/profile-update/${id}`, data)
+      .put(`/api/v1/user/profile-update/${id}`, dat)
       .then((res) => {
-        console.log(res.data.user);
         dispatch({ type: USER_PROFILE_UPDATE, payload: res.data.user });
-        setBioShow(false);
+        setModalShow(false);
         createToast(res.data.message, "success");
       })
       .catch((error) => {

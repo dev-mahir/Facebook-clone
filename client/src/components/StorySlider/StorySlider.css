@@ -1,0 +1,110 @@
+.story-slider-wrapper {
+  display: flex;
+  width: 60%;
+  height: 100%;
+  margin: auto;
+  align-items: flex-start;
+  justify-content: center;
+  transform: translate(0, 30px);
+}
+.story-slider-wrapper .story-slider {
+  width: 350px;
+  height: 90vh;
+  background-color: rgb(40, 38, 38);
+  border-radius: 10px;
+  position: relative;
+}
+.story-slider-wrapper .story-slider .slider-item {
+  width: 100%;
+  height: 100%;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}
+.story-slider-wrapper .story-slider .slider-bars-wrapper {
+  display: flex;
+  gap: 10px;
+  padding: 0 15px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 10px;
+}
+.story-slider-wrapper .story-slider .slider-bars-wrapper .bars-item {
+  width: 100%;
+  height: 4px;
+  border-radius: 10px;
+  background: rgb(95, 92, 92);
+  border-radius: 10px;
+}
+.story-slider-wrapper .story-slider .slider-bars-wrapper .bars-item .progress {
+  width: 0%;
+  height: 5px;
+  background: white;
+}
+
+.story-slider-wrapper
+  .story-slider
+  .slider-bars-wrapper
+  .bars-item.active
+  .progress {
+  animation: sliderLoading 3s;
+}
+
+@keyframes sliderLoading {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+
+.story-slider-wrapper
+  .story-slider
+  .slider-bars-wrapper
+  .bars-item.viewed
+  .progress {
+  width: 100%;
+  background: white;
+}
+
+.story-slider-wrapper .navigation {
+  top: 45%;
+  width: 100%;
+  left: 0;
+  transform: translate(0, 45%);
+  position: absolute;
+  justify-content: space-between;
+  display: flex;
+}
+.story-slider-wrapper .navigation button {
+  height: 35px;
+  width: 35px;
+  color: black;
+  background-color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.story-slider-wrapper .navigation button.prev {
+  transform: translateX(-45px);
+  transition: 0.3s all;
+}
+.story-slider-wrapper .navigation button.prev:hover {
+  transform: translateX(-50px);
+  transition: 0.3s;
+}
+.story-slider-wrapper .navigation button.next {
+  transform: translateX(45px);
+  transition: 0.3s;
+}
+.story-slider-wrapper .navigation button.next:hover {
+  transform: translateX(50px);
+  transition: 0.3s;
+}
